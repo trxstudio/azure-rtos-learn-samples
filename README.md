@@ -27,4 +27,4 @@ You can also find the sample projects that can be built and run with Visual Stud
 
 * [Azure RTOS](https://aka.ms/rtos)
 * [Azure RTOS on GitHub](https://github.com/azure-rtos)
-* [Real-Time Embedded Multithreading Using ThreadX](https://www.amazon.com/Real-Time-Embedded-Multithreading-Using-ThreadX/dp/1523730420/ref=sr_1_1?crid=1JWWLSCUL3TMU&keywords=threadx&qid=1645485431&sprefix=threadx%2Caps%2C122&sr=8-1) [[PDF version](https://github.com/Azure-Samples/azure-rtos-learn-samples/releases/download/book/2020_10_15_Real-Time_Embedded_Multithreading_with_ThreadX_4th_Edition.pdf)]
+* [Real-Time Embedded Multithreading Using ThreadX](https://www.amazon.com/Real-Time-Embedded-Multithreading-Using-ThreadX/dp/1523730420/ref=sr_1_1?crid=1JWWLSCUL3TMU&keywords=threadx&qid=1645485431&sprefix=threadx%2Caps%2C122&sr=8-1) [[PDF version](https://github.com/Azure-Samples/azure-rtos-learn-samples/releases/download/book/Real-Time_Embedded_Multithreading_with_ThreadX_4th_Edition_2022_02_25.pdf)]
