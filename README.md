@@ -3,13 +3,13 @@ page_type: sample
 languages:
 - c
 - asm
-name: "Azure RTOS Microsoft Learn Samples"
+name: "Azure RTOS Microsoft Learning Samples"
 description: "Sample projects for Azure RTOS Microsoft Learning courses how."
 products:
 - azure-rtos
 ---
 
-# Azure RTOS Microsoft Learn Samples
+# Azure RTOS Microsoft Learning Samples
 
 This repo contains sample projects for [Azure RTOS ThreadX](docs.microsoft.com/learn/paths/azure-rtos-threadx) courses on Microsoft Learning.
 
