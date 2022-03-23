@@ -1,1 +1,0 @@
-/usr/bin/cc -g -pthread -m32 -g -pthread  -Wl,--gc-sections -melf_i386 CMakeFiles/ProjectHelloWorld.dir/main.c.o -o ProjectHelloWorld  lib/libthreadx.a 
