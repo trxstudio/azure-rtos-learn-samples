@@ -98,7 +98,7 @@ void  Urgent_entry(ULONG thread_input)
         tx_mutex_put(&Processor);
 
         current_time = tx_time_get();
-        printf("Current Time: %5u  Urgent Thread finished a cycle...\n",
+        printf("Current Time: %5lu  Urgent Thread finished a cycle...\n",
             current_time);
     }
 }
@@ -120,7 +120,7 @@ void  Routine_entry(ULONG thread_input)
         /******* complete Activity 4 here -- use Activity 2 as a guide *****/
 
         current_time = tx_time_get();
-        printf("Current Time: %5u    Routine Thread finished a cycle...\n",
+        printf("Current Time: %5lu    Routine Thread finished a cycle...\n",
             current_time);
     }
 }
