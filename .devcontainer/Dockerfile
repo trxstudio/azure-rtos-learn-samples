@@ -25,7 +25,7 @@ RUN apt update \
     && rm /usr/share/keyrings/kitware-archive-keyring.gpg \
     #
     # Install C++ tools and Git
-    && apt -y install --no-install-recommends build-essential gdb cppcheck git cmake kitware-archive-keyring ninja-build zip unzip \
+    && apt -y install --no-install-recommends build-essential gcc-multilib g++-multilib gdb cppcheck git cmake kitware-archive-keyring ninja-build zip unzip \
     #
     # [Optional] Update UID/GID if needed
     && if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
