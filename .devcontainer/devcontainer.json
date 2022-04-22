@@ -32,4 +32,5 @@
 		"sshd": "latest"
 	},
 	"postCreateCommand": "git submodule update --recursive --init",
+    "runArgs": [ "--cap-add=NET_ADMIN"]
 }
