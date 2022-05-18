@@ -5,6 +5,9 @@
 set(THREADX_ARCH "linux")
 set(THREADX_TOOLCHAIN "gnu")
 
+# Define the ThreadX options that will be used by projects
+set(TX_THREAD_ENABLE_PERFORMANCE_INFO)
+
 # Use vcpkg toolchain file
 set(VCPKG_CMAKE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 if (EXISTS ${VCPKG_CMAKE})
