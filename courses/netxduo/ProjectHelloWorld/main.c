@@ -12,6 +12,10 @@
 #include   "tx_api.h"
 #include   "nx_api.h"
 
+/* Define sample IP address.  */
+#define SAMPLE_IPV4_ADDRESS             IP_ADDRESS(192, 168, 1, 2)
+#define SAMPLE_IPV4_MASK                0xFFFFFF00UL
+
 /* Define demo stack size.   */
 #define                 NX_PACKET_POOL_SIZE     ((1536 + sizeof(NX_PACKET)) * 30)
 #define                 DEMO_STACK_SIZE         2048
@@ -64,7 +68,7 @@ UINT    status;
         error_counter++;
 
     /* Create an IP instance.  */
-    status = nx_ip_create(&ip_0, "NetX IP Instance 0", IP_ADDRESS(192, 168, 1, 2), 0xFFFFFF00UL, &pool_0, _nx_linux_network_driver,
+    status = nx_ip_create(&ip_0, "NetX IP Instance 0", SAMPLE_IPV4_ADDRESS, SAMPLE_IPV4_MASK, &pool_0, _nx_linux_network_driver,
                           pointer, 2048, 1);
     pointer =  pointer + 2048;
 
@@ -86,4 +90,17 @@ UINT    status;
     /* Check for ICMP enable errors.  */
     if(status)
         error_counter++;
+
+    /* Output IP address and network mask.  */
+    printf("NetXDuo is running\r\n");
+    printf("IP address: %lu.%lu.%lu.%lu\r\n",
+           (SAMPLE_IPV4_ADDRESS >> 24),
+           (SAMPLE_IPV4_ADDRESS >> 16 & 0xFF),
+           (SAMPLE_IPV4_ADDRESS >> 8 & 0xFF),
+           (SAMPLE_IPV4_ADDRESS & 0xFF));
+    printf("Mask: %lu.%lu.%lu.%lu\r\n",
+           (SAMPLE_IPV4_MASK >> 24),
+           (SAMPLE_IPV4_MASK >> 16 & 0xFF),
+           (SAMPLE_IPV4_MASK >> 8 & 0xFF),
+           (SAMPLE_IPV4_MASK & 0xFF));
 }
