@@ -16,23 +16,32 @@
 #define SAMPLE_IPV4_ADDRESS             IP_ADDRESS(192, 168, 1, 2)
 #define SAMPLE_IPV4_MASK                0xFFFFFF00UL
 
-/* Define demo stack size.   */
-#define                 NX_PACKET_POOL_SIZE     ((1536 + sizeof(NX_PACKET)) * 30)
-#define                 DEMO_STACK_SIZE         2048
+/* Define packet pool.  */
+#define PACKET_SIZE                     1536
+#define PACKET_COUNT                    30
+#define PACKET_POOL_SIZE                ((PACKET_SIZE + sizeof(NX_PACKET)) * PACKET_COUNT)
+
+
+/* Define IP stack size.   */
+#define IP_STACK_SIZE                   2048
+
+/* Define IP thread priority.  */
+#define IP_THREAD_PRIORITY              1
+
+/* Define ARP pool.  */
+#define ARP_POOL_SIZE                   1024
 
 /* Define the ThreadX and NetX object control blocks...  */
-TX_THREAD               thread_0;
-NX_PACKET_POOL          pool_0;
-NX_IP                   ip_0;
+NX_PACKET_POOL          default_pool;
+NX_IP                   default_ip;
 
-UCHAR                  *pointer;
-UCHAR                   pool_area[NX_PACKET_POOL_SIZE];
+/* Define memory buffers.  */
+ULONG                   pool_area[PACKET_POOL_SIZE >> 2];
+ULONG                   ip_stack[IP_STACK_SIZE >> 2];
+ULONG                   arp_area[ARP_POOL_SIZE >> 2];
 
 /* Define the counters used in the demo application...  */
 ULONG                   error_counter;
-
-/* Define thread prototypes.  */
-VOID    thread_0_entry(ULONG thread_input);
 
 /***** Substitute your ethernet driver entry function here *********/
 extern  VOID _nx_linux_network_driver(NX_IP_DRIVER*);
@@ -53,39 +62,37 @@ void    tx_application_define(void *first_unused_memory)
 
 UINT    status;
 
-    /* Setup the working pointer.  */
-    pointer = (UCHAR *) first_unused_memory;
+    NX_PARAMETER_NOT_USED(first_unused_memory);
 
     /* Initialize the NetX system.  */
     nx_system_initialize();
 
     /* Create a packet pool.  */
-    status = nx_packet_pool_create(&pool_0, "NetX Main Packet Pool",
-                                   1536, pool_area, NX_PACKET_POOL_SIZE);
+    status = nx_packet_pool_create(&default_pool, "NetX Main Packet Pool",
+                                   PACKET_SIZE, pool_area, sizeof(pool_area));
 
     /* Check for packet pool create errors.  */
     if (status)
         error_counter++;
 
     /* Create an IP instance.  */
-    status = nx_ip_create(&ip_0, "NetX IP Instance 0", SAMPLE_IPV4_ADDRESS, SAMPLE_IPV4_MASK, &pool_0, _nx_linux_network_driver,
-                          pointer, 2048, 1);
-    pointer =  pointer + 2048;
+    status = nx_ip_create(&default_ip, "NetX IP Instance 0", SAMPLE_IPV4_ADDRESS, SAMPLE_IPV4_MASK,
+                          &default_pool, _nx_linux_network_driver,
+                          (void *)ip_stack, sizeof(ip_stack), IP_THREAD_PRIORITY);
 
     /* Check for IP create errors.  */
     if (status)
         error_counter++;
 
     /* Enable ARP and supply ARP cache memory for IP Instance 0.  */
-    status =  nx_arp_enable(&ip_0, (void *) pointer, 1024);
-    pointer = pointer + 1024;
+    status =  nx_arp_enable(&default_ip, (void *)arp_area, sizeof(arp_area));
 
     /* Check for ARP enable errors.  */
     if (status)
         error_counter++;
 
     /* Enable ICMP */
-    status = nx_icmp_enable(&ip_0);
+    status = nx_icmp_enable(&default_ip);
 
     /* Check for ICMP enable errors.  */
     if(status)
