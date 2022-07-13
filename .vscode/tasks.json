@@ -137,6 +137,10 @@
                 {
                     "label": "01",
                     "value": "ProjectHelloWorld"
+                },
+                {
+                    "label": "02",
+                    "value": "ProjectUDPEchoClient"
                 }
             ],
             "default": "ProjectHelloWorld"
