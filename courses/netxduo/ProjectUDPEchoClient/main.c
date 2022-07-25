@@ -50,13 +50,16 @@
 NX_PACKET_POOL          default_pool;
 NX_IP                   default_ip;
 NX_UDP_SOCKET           udp_client;
-TX_THREAD               sample_thread;
+NX_UDP_SOCKET           udp_server;
+TX_THREAD               client_thread;
+TX_THREAD               server_thread;
 
 /* Define memory buffers.  */
 ULONG                   pool_area[PACKET_POOL_SIZE >> 2];
 ULONG                   ip_stack[IP_STACK_SIZE >> 2];
 ULONG                   arp_area[ARP_POOL_SIZE >> 2];
-ULONG                   sample_thread_stack[SAMPLE_THREAD_STACK_SIZE >> 2];
+ULONG                   client_thread_stack[SAMPLE_THREAD_STACK_SIZE >> 2];
+ULONG                   server_thread_stack[SAMPLE_THREAD_STACK_SIZE >> 2];
 
 /* Define the counters used in the demo application...  */
 ULONG                   error_counter;
@@ -65,7 +68,8 @@ ULONG                   error_counter;
 extern  VOID _nx_linux_network_driver(NX_IP_DRIVER*);
 
 /* Define thread prototypes.  */
-void sample_thread_entry(ULONG thread_input);
+void client_thread_entry(ULONG thread_input);
+void server_thread_entry(ULONG thread_input);
 
 /* Define main entry point.  */
 int main()
@@ -88,8 +92,11 @@ UINT    status;
     nx_system_initialize();
 
     /* Create the sample thread.  */
-    tx_thread_create(&sample_thread, "Sample Thread", sample_thread_entry, 0,
-                     sample_thread_stack, sizeof(sample_thread_stack),
+    tx_thread_create(&client_thread, "Client Thread", client_thread_entry, 0,
+                     client_thread_stack, sizeof(client_thread_stack),
+                     SAMPLE_THREAD_PRIORITY, SAMPLE_THREAD_PRIORITY, TX_NO_TIME_SLICE, TX_AUTO_START);
+    tx_thread_create(&server_thread, "Server Thread", server_thread_entry, 0,
+                     server_thread_stack, sizeof(server_thread_stack),
                      SAMPLE_THREAD_PRIORITY, SAMPLE_THREAD_PRIORITY, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Create a packet pool.  */
@@ -145,8 +152,8 @@ UINT    status;
 }
 
 
-/* Sample thread entry.  */
-void sample_thread_entry(ULONG thread_input)
+/* Client thread entry.  */
+void client_thread_entry(ULONG thread_input)
 {
 UINT       status;
 NX_PACKET *packet_ptr;
@@ -236,4 +243,68 @@ NXD_ADDRESS echo_server_address;
     /* Cleanup the UDP socket.  */
     nx_udp_socket_unbind(&udp_client);
     nx_udp_socket_delete(&udp_client);
+}
+
+
+/* Server thread entry.  */
+void server_thread_entry(ULONG thread_input)
+{
+UINT       status;
+NX_PACKET *packet_ptr;
+NXD_ADDRESS echo_client_address;
+UINT echo_client_port;
+
+    /* Create a UDP socket.  */
+    status = nx_udp_socket_create(&default_ip, &udp_server, "UDP Echo Server", NX_IP_NORMAL, NX_FRAGMENT_OKAY,
+                                  SAMPLE_SOCKET_TTL, SAMPLE_SOCKET_RX_QUEUE_MAXIMUM);
+
+    /* Check status.  */
+    if (status)
+    {
+        error_counter++;
+        return;
+    }
+
+    /* Bind the UDP socket to echo port.  */
+    status =  nx_udp_socket_bind(&udp_server, ECHO_SERVER_PORT, NX_WAIT_FOREVER);
+
+    /* Check status.  */
+    if (status)
+    {
+        error_counter++;
+        return;
+    }
+
+    /* Loop to echo data from client.  */
+    for (;;)
+    {
+        
+        /* Receive a packet.  */
+        status =  nx_udp_socket_receive(&udp_server, &packet_ptr, NX_WAIT_FOREVER);
+
+        /* Check status.  */
+        if (status != NX_SUCCESS)
+        {
+            error_counter++;
+            break;
+        }
+
+        /* Get address of peer.  */
+        status = nxd_udp_source_extract(packet_ptr, &echo_client_address, &echo_client_port);
+
+        /* Echo data to client.  */
+        status =  nxd_udp_socket_send(&udp_server, packet_ptr, &echo_client_address, echo_client_port);
+        
+        /* Check status.  */
+        if (status != NX_SUCCESS)
+        {
+            nx_packet_release(packet_ptr);
+            error_counter++;
+            break;
+        }
+    }
+
+    /* Cleanup the UDP socket.  */
+    nx_udp_socket_unbind(&udp_server);
+    nx_udp_socket_delete(&udp_server);
 }
