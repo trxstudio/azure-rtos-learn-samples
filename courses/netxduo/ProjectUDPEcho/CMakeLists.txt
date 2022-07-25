@@ -22,7 +22,7 @@ set(NXD_ENABLE_FILE_SERVERS
     CACHE BOOL "Includes a dependency on FileX to support 'server' protocol handlers (default is ON)")
 
 # Project
-set(PROJECT ProjectUDPEchoClient)
+set(PROJECT ProjectUDPEcho)
 project(${PROJECT} VERSION 0.1.0 LANGUAGES C)
 
 add_subdirectory(${LIBS_DIR}/threadx lib/threadx)
