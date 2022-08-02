@@ -140,7 +140,11 @@
                 },
                 {
                     "label": "02",
-                    "value": "ProjectUDPEcho"
+                    "value": "ProjectUDPEchoClient"
+                },
+                {
+                    "label": "03",
+                    "value": "ProjectUDPEchoServer"
                 }
             ],
             "default": "ProjectHelloWorld"
