@@ -65,7 +65,7 @@
             "label": "Run NetXDuo Project",
             "type": "shell",
             "linux": {
-                "command": "sudo ./tools/init_network.sh>/dev/null 2>&1 && sudo ./courses/netxduo/${input:netxduoProjectsList}/build/${input:netxduoProjectsList}",
+                "command": "sudo ./tools/init_network.sh>/dev/null 2>&1 && exe=./courses/netxduo/${input:netxduoProjectsList}/build/${input:netxduoProjectsList} && echo $exe && sudo setcap cap_net_raw,cap_net_admin=eip $exe && $exe",
                 "options": {
                     "cwd": "${workspaceFolder}"
                 },
