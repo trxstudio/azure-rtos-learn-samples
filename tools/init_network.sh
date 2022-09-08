@@ -2,6 +2,7 @@
 
 ip link add veth1 type veth peer name veth2
 ifconfig veth2 192.168.1.1 netmask 255.255.255.0 up
+ifconfig veth2 add 2001::1234/64
 ifconfig veth1 up
 ethtool --offload veth2 tx off
 ethtool --offload veth1 tx off
