@@ -249,7 +249,7 @@ NXD_ADDRESS echo_server_address;
     {
         
         /* Allocate a packet.  */
-        status =  nx_packet_allocate(&default_pool, &packet_ptr, NX_UDP_PACKET, NX_WAIT_FOREVER);
+        status =  nx_packet_allocate(&default_pool, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
 
         /* Check status.  */
         if (status != NX_SUCCESS)
