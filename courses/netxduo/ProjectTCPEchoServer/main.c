@@ -173,7 +173,7 @@ UINT    status;
 }
 
 
-/* Client thread entry.  */
+/* Server thread entry.  */
 void server_thread_entry(ULONG thread_input)
 {
 UINT       status;
