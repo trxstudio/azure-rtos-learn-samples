@@ -145,6 +145,14 @@
                 {
                     "label": "03",
                     "value": "ProjectUDPEchoServer"
+                },
+                {
+                    "label": "04",
+                    "value": "ProjectTCPEchoClient"
+                },
+                {
+                    "label": "05",
+                    "value": "ProjectTCPEchoServer"
                 }
             ],
             "default": "ProjectHelloWorld"
