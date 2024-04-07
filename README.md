@@ -1,3 +1,4 @@
+[![Board Status](https://trxstudio.visualstudio.com/a124b95a-9f0f-438d-be56-c64ddd469f50/5802ccb6-bed0-486a-838b-c54948e1a32c/_apis/work/boardbadge/be8401fc-a51c-4bbd-aea4-fb5da5f94aff)](https://trxstudio.visualstudio.com/a124b95a-9f0f-438d-be56-c64ddd469f50/_boards/board/t/5802ccb6-bed0-486a-838b-c54948e1a32c/Microsoft.RequirementCategory)
 ---
 page_type: sample
 languages:
